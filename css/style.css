@@ -1,0 +1,368 @@
+/**************************************************
+ *
+ * Foundation
+ *
+ **************************************************/
+
+html {
+    --font: 'Helvetica Neue', sans-serif;
+
+    /*Type sizes*/
+    /*Generate a typescale*/
+    --fontSizex1: 16px;
+    --fontSizex2: 1.5em;
+    --fontSizex3: 2.25em;
+    --fontSizex4: 3.375em;
+    --fontSizex5: 5.0em;
+    --fontSizex6: 7.6em;
+
+    /*Corresponding line heights*/
+    --lineHeightx1: 1.5;
+    --lineHeightx2: 1.5;
+    --lineHeightx3: 1.5;
+    --lineHeightx4: 1.5;
+    --lineHeightx5: 1.5;
+    --lineHeightx6: 1.5;
+
+      /*Colours*/
+    --white: #fff;
+    --dark: #000;
+
+    /*Set base colour scheme*/
+    --primary-color: var(--dark);
+    --bg-color: var(--white);
+}
+
+/*
+ * Set dynamic color theming
+ * Some components will need manual adjustments
+ */
+
+@media (prefers-color-scheme: light) {
+    html {
+        --primary-color: var(--dark);
+        --bg-color: var(--white);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    html {
+        --primary-color: var(--white);
+        --bg-color: var(--dark);
+    }
+
+}
+
+html.darkTheme {
+    --primary-color: var(--white);
+    --bg-color: var(--dark);
+}
+
+html.lightTheme {
+    --primary-color: var(--dark);
+    --bg-color: var(--white);
+}
+
+/**************************************************
+ *
+ * Resets
+ *
+ **************************************************/
+
+html, body {
+  height: 100%;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+button,
+select {
+    text-transform: none;
+}
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+    -webkit-appearance: button;
+}
+
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+    border-style: none;
+    padding: 0;
+}
+
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
+    outline: 1px dotted ButtonText;
+}
+
+video {
+    width: auto;
+    height: auto;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+video:focus {
+    outline: none !important;
+}
+
+/* Very short durations means JavaScript that relies on events still works */
+@media screen and (prefers-reduced-motion: reduce) {  
+    * {
+        
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        transition: 0.001ms !important;
+    }
+}
+
+[id] {
+    scroll-margin-top: 15vh;
+}
+
+/**************************************************
+ *
+ * Base Typographic Styles
+ *
+ **************************************************/
+
+body {
+    font-family: var(--font);
+    line-height: 1.5;
+}
+
+p, 
+li {
+    font-size: 16px;
+    line-height: 1.65;
+    letter-spacing: 0;
+    margin: 0;
+}
+
+b,
+strong {
+    font-weight: bolder;
+}
+
+/**************************************************
+ *
+ * Main
+ *
+ **************************************************/
+
+html {
+    color: var(--primary-color);
+    background: var(--bg-color);
+}
+
+main {
+    margin: 6rem auto;
+    padding: 0 1rem;
+    max-width: 800px;
+}
+
+h1 {
+    font-size: var(--fontSizex5);
+    letter-spacing: -2px;
+    line-height: 1.0;
+}
+
+/**************************************************
+ *
+ * Global Element Styling
+ *
+ **************************************************/
+
+ul {
+    padding: 0;
+    list-style: none;
+}
+
+li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+button {
+    background: none;
+    color: var(--primary-color);
+    padding: 0.25rem 2rem;
+    border: 1px solid var(--primary-color);
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+input[type="text"],
+input[type="tel"]{
+    background: none;
+    color: var(--primary-color);
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--primary-color);
+}
+
+/**************************************************
+ *
+ * Add Book Form
+ *
+ **************************************************/
+
+details {
+    margin: 2rem 0;
+}
+
+summary {
+    border: 1px solid var(--primary-color);
+    padding: 0.5rem 1rem;
+    width: fit-content;
+    user-select: none;
+}
+
+summary:hover {
+    cursor: pointer;
+}
+
+form {
+    margin: -1px 0 4rem 0;
+    border: 1px solid var(--primary-color);
+    padding: 1rem;
+}
+
+form ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+button[type="submit"]{
+    margin-top: 3rem;
+}
+
+form li:last-child{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: flex-end;
+    height: 100%;
+    margin: auto 0 0 0;
+}
+
+input[type="checkbox"]{
+    content: '';
+    appearance: none;
+    -webkit-appearance: none;
+    background: none;
+    display: grid;
+    place-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--primary-color);
+    margin: 0 0.5rem 0 0;
+}
+
+input[type="checkbox"]:hover {
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked:before{
+    content: '✓';
+    font-size: 2rem;
+}
+
+/**************************************************
+ *
+ * Book Library
+ *
+ **************************************************/
+
+#bookLibrary {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1rem;
+}
+
+#bookLibrary li {
+    padding: 1rem;
+    border: 1px solid var(--primary-color);
+    justify-content: space-between;
+}
+
+.pageCount {
+    margin-top: 1rem;
+}
+
+#bookLibrary li div:nth-child(2) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+#bookLibrary li div:nth-child(2) label {
+    display: flex;
+    align-items: center;
+}
+
+#bookLibrary li div:nth-child(2) input {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+#bookLibrary li div:nth-child(2) input:checked:before{
+    font-size: 1rem;
+}
+
+#bookLibrary button {
+    width: fit-content;
+    border: none;
+    padding: 0;
+    text-decoration: underline;
+}
+
+h2 {
+    font-size: var(--fontSizex3);
+    line-height: 1.2;
+}
+
+h2 + h3 {
+    line-height: 1.2;
+    font-weight: normal;
+    margin-top: 0.25rem;
+}
+
+.pageCount {
+    letter-spacing: 0.3px;
+}

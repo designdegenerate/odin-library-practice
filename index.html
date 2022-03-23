@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Book Tracker</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<body>
+    <main>
+        <h1>Book Tracker</h1>
+        <details>
+            <summary>Add Book</summary>
+            <form>
+                <ul>
+                    <li>
+                        <label for="title">Title</label>
+                        <input min minlength="1" required id="title" type="text" name="title">
+                    </li>
+                    <li>
+                        <label for="author">Author</label>
+                        <input required id="author" minlength="1" type="text" name="author">
+                    </li>
+                    <li>
+                        <label for="pageCount">Pagecount</label>
+                        <input title="Number" required minlength="1" maxlength="4" pattern="([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])" id="pageCount" type="tel" name="pages">
+                    </li>
+                    <li>
+                        <input id="hasRead" value="true" type="checkbox" name="hasRead">
+                        <label for="hasRead">I have read this book</label>
+                    </li>
+                </ul>
+
+                <button type="submit">Add Book</button>
+            </form>
+        </details>
+        <ul id="bookLibrary">
+        </ul>
+    </main>
+
+<script type="text/javascript" src="/js/main.js"></script>
+</body>
+</html>
