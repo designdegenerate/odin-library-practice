@@ -168,34 +168,6 @@ function addBookToLibrary(title, author, pageCount, hasRead) {
 
 }
 
-function restoreFromLocalStorage() {
-
-    /*reads from local storage and sends every object to addBookToLibrary*/
-    //window.localStorage.key
-
-    /*on start, read from local storage,
-    convert strings back to json,
-    from json match metadata,
-    loop over each item to create each item
-
-    */
-
-
-  for (var i = localStorage.length - 1; i >= 0; i--) {
-
-    //Get list of key names
-    let key = localStorage.key(i);
-
-    //Convert key string back to JSON
-    const book = JSON.parse(localStorage.getItem(key));
-
-    myLibrary.push(book);
-    createHTML(book);
-
-  }
-
-}
-
 document.querySelector('#hasRead').addEventListener('change', function(event){
     if (this.hasAttribute('checked')) {
         this.removeAttribute('checked');
@@ -228,4 +200,29 @@ document.querySelector('form').addEventListener('submit', function(event){
 
 });
 
-restoreFromLocalStorage();
+( () => {
+
+    /*reads from local storage and sends every object to addBookToLibrary*/
+    //window.localStorage.key
+
+    /*on start, read from local storage,
+    convert strings back to json,
+    from json match metadata,
+    loop over each item to create each item
+
+    */
+
+  for (var i = localStorage.length - 1; i >= 0; i--) {
+
+    //Get list of key names
+    let key = localStorage.key(i);
+
+    //Convert key string back to JSON
+    const book = JSON.parse(localStorage.getItem(key));
+
+    myLibrary.push(book);
+    createHTML(book);
+
+  }
+
+})();
