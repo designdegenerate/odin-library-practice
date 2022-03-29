@@ -219,20 +219,26 @@ document.querySelector('form').addEventListener('submit', (event) => {
 
     */
 
-    /*
   for (var i = localStorage.length - 1; i >= 0; i--) {
 
     //Get list of key names
     let key = localStorage.key(i);
 
     //Convert key string back to JSON
-    const book = JSON.parse(localStorage.getItem(key));
+    const book= JSON.parse(localStorage.getItem(key))
 
-    myLibrary.push(book);
-    createHTML(book);
+    //And then, turn that object back into a class
+    const bookClass = new Book(
+        book.title,
+        book.author,
+        book.pageCount,
+        book.hash
+    );
+
+    myLibrary.push(bookClass);
+    bookClass.createHTML();
 
     
   }
-  */
 
 })();
