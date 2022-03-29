@@ -1,3 +1,9 @@
+/*
+ * TODO:
+ * convert all functions to factory constructors
+ * Then, convert to classes
+ * */
+
 let myLibrary = [];
 
 function Book(title, author, pageCount, hasRead, hash) {
@@ -8,13 +14,7 @@ function Book(title, author, pageCount, hasRead, hash) {
     this.hash = hash;
 }
 
-function getBookIndex(hash){
-    const rootElement = document.querySelector(`[data-library="${hash}"]`);
-    const libIndex = myLibrary.findIndex(book => book.hash == hash);
-    return libIndex;
-}
-
-function pushToLocalStorage(book) {
+const pushToLocalStorage = book => {
 
   window.localStorage
     .setItem(book.hash, 
@@ -22,7 +22,14 @@ function pushToLocalStorage(book) {
 
 }
 
-function createHTML(book) {
+const createHTML = book => {
+
+    const getBookIndex = hash => {
+        const rootElement = document.querySelector(`[data-library="${hash}"]`);
+        const libIndex = myLibrary.findIndex(book => book.hash == hash);
+        return libIndex;
+    }
+
     const ul = document.querySelector('#bookLibrary');
     const li = document.createElement('li');
 
@@ -136,7 +143,7 @@ function createHTML(book) {
 
 }
 
-function addBookToLibrary(title, author, pageCount, hasRead) {
+const addBookToLibrary = (title, author, pageCount, hasRead) => {
 
     /*
      * Generate a hash of the book, to easily reference
@@ -145,7 +152,7 @@ function addBookToLibrary(title, author, pageCount, hasRead) {
 
     //https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
 
-    const getHash = function(str, seed = 0) {
+    const getHash = (str, seed = 0) => {
         let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
         for (let i = 0, ch; i < str.length; i++) {
             ch = str.charCodeAt(i);
@@ -176,7 +183,7 @@ document.querySelector('#hasRead').addEventListener('change', function(event){
     }
 })
 
-document.querySelector('form').addEventListener('submit', function(event){
+document.querySelector('form').addEventListener('submit', (event) => {
     event.preventDefault();
 
     const readStatus = document.querySelector('#hasRead')
