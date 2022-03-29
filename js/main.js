@@ -197,7 +197,6 @@ document.querySelector('form').addEventListener('submit', (event) => {
 
     book.generateHash();
     book.addBookToLibrary();
-    book.createHTML();
    
     document.querySelector('form').reset();
 
