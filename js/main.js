@@ -6,19 +6,64 @@
 
 let myLibrary = [];
 
-function Book(title, author, pageCount, hasRead, hash) {
-    this.title = title;
-    this.author = author;
-    this.pageCount = pageCount;
-    this.hasRead = hasRead;
-    this.hash = hash;
-}
+/* 
+ * Two types of books:
+ * New books, take input from DOM
+ * and create new constructor from it
+ * resulting in object, plus all those methods attached to it
+ * Not only does it manipulate exisiting data, it also
+ * generates a hash
+ * 
+ * Other type is localStorage book
+ * Already has a hash attached
+ */
 
-const pushToLocalStorage = book => {
+class Book {
 
-  window.localStorage
-    .setItem(book.hash, 
-      JSON.stringify(book));
+    constructor(title, author, pageCount, hasRead, hash) {
+        this.title = title;
+        this.author = author;
+        this.pageCount = pageCount;
+        this.hasRead = hasRead;
+        this.hash = hash;
+    }
+
+    static _checkForHash() {
+        if (this.hash == undefined) {
+            console.log("Cannot continue without a hash. Please generate one first.")
+            return;
+        }
+    }
+
+    generateHash() {
+        const getHash = (str, seed = 0) => {
+            let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
+            for (let i = 0, ch; i < str.length; i++) {
+                ch = str.charCodeAt(i);
+                h1 = Math.imul(h1 ^ ch, 2654435761);
+                h2 = Math.imul(h2 ^ ch, 1597334677);
+            }
+            h1 = Math.imul(h1 ^ (h1>>>16), 2246822507) ^ Math.imul(h2 ^ (h2>>>13), 3266489909);
+            h2 = Math.imul(h2 ^ (h2>>>16), 2246822507) ^ Math.imul(h1 ^ (h1>>>13), 3266489909);
+            return 4294967296 * (2097151 & h2) + (h1>>>0);
+        };
+    
+        const data = this.title + this.author + this.pageCount;
+        this.hash = getHash(data);
+        return
+    }
+
+    pushToLocalStorage = () => {
+
+        window.localStorage
+          .setItem(this.hash, 
+            JSON.stringify(book));
+      
+      }
+    
+    //CreateHTML()
+    //pushToLocalStorage
+    //PushtoLibrary
 
 }
 
@@ -152,22 +197,7 @@ const addBookToLibrary = (title, author, pageCount, hasRead) => {
 
     //https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
 
-    const getHash = (str, seed = 0) => {
-        let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
-        for (let i = 0, ch; i < str.length; i++) {
-            ch = str.charCodeAt(i);
-            h1 = Math.imul(h1 ^ ch, 2654435761);
-            h2 = Math.imul(h2 ^ ch, 1597334677);
-        }
-        h1 = Math.imul(h1 ^ (h1>>>16), 2246822507) ^ Math.imul(h2 ^ (h2>>>13), 3266489909);
-        h2 = Math.imul(h2 ^ (h2>>>16), 2246822507) ^ Math.imul(h1 ^ (h1>>>13), 3266489909);
-        return 4294967296 * (2097151 & h2) + (h1>>>0);
-    };
-
-    const data = title + author + pageCount
-    hashHex = getHash(data);
-
-    const book = new Book(title, author, pageCount, hasRead, hashHex);
+        const book = new Book(title, author, pageCount, hasRead, hashHex);
 
     myLibrary.push(book);
     pushToLocalStorage(book);
@@ -175,6 +205,7 @@ const addBookToLibrary = (title, author, pageCount, hasRead) => {
 
 }
 
+/*
 document.querySelector('#hasRead').addEventListener('change', function(event){
     if (this.hasAttribute('checked')) {
         this.removeAttribute('checked');
@@ -206,6 +237,7 @@ document.querySelector('form').addEventListener('submit', (event) => {
     }
 
 });
+*/
 
 ( () => {
 
@@ -219,6 +251,7 @@ document.querySelector('form').addEventListener('submit', (event) => {
 
     */
 
+    /*
   for (var i = localStorage.length - 1; i >= 0; i--) {
 
     //Get list of key names
@@ -230,6 +263,8 @@ document.querySelector('form').addEventListener('submit', (event) => {
     myLibrary.push(book);
     createHTML(book);
 
+    
   }
+  */
 
 })();
