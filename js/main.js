@@ -164,6 +164,7 @@ class Book {
 
     addBookToLibrary() {
     
+        this.generateHash();
         myLibrary.push(this);
         this.pushToLocalStorage(this);
         this.createHTML(this);
@@ -195,9 +196,8 @@ document.querySelector('form').addEventListener('submit', (event) => {
         hasRead
     )
 
-    book.generateHash();
     book.addBookToLibrary();
-   
+ 
     document.querySelector('form').reset();
 
     if (readStatus.hasAttribute('checked')) {
