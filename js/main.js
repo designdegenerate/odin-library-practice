@@ -1,22 +1,4 @@
-/*
- * TODO:
- * convert all functions to factory constructors
- * Then, convert to classes
- * */
-
 let myLibrary = [];
-
-/* 
- * Two types of books:
- * New books, take input from DOM
- * and create new constructor from it
- * resulting in object, plus all those methods attached to it
- * Not only does it manipulate exisiting data, it also
- * generates a hash
- * 
- * Other type is localStorage book
- * Already has a hash attached
- */
 
 class Book {
 
@@ -34,6 +16,7 @@ class Book {
             return;
         }
 
+        //https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
         const getHash = (str, seed = 0) => {
             let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
             for (let i = 0, ch; i < str.length; i++) {
@@ -55,155 +38,139 @@ class Book {
 
         window.localStorage
           .setItem(this.hash, 
-            JSON.stringify(book));
+            JSON.stringify(this));
       
       }
+
+    createHTML() {
+
+        const getBookIndex = () => {
+            const rootElement = document.querySelector(`[data-library="${this.hash}"]`);
+            const libIndex = myLibrary.findIndex(book => this.hash == hash);
+            return libIndex;
+        }
     
-    //CreateHTML()
-    //pushToLocalStorage
-    //PushtoLibrary
-
-}
-
-const createHTML = book => {
-
-    const getBookIndex = hash => {
-        const rootElement = document.querySelector(`[data-library="${hash}"]`);
-        const libIndex = myLibrary.findIndex(book => book.hash == hash);
-        return libIndex;
-    }
-
-    const ul = document.querySelector('#bookLibrary');
-    const li = document.createElement('li');
-
-    const topDiv = document.createElement('div');
-    const h2 = document.createElement('h2');
-    const h3 = document.createElement('h3');
-    const pgCount = document.createElement('p');
-    const pgCountInner = document.createElement('span');
-
-    const botDiv = document.createElement('div');
-    const label = document.createElement('label');
-    const checkbox = document.createElement('input');
-    const removeBtn = document.createElement('button');
-
-    /* 
-     * Match data from book object to
-     * elements, add necessary attributes,
-     * and append them together correctly
-     */
-
-    li.setAttribute('data-library', book.hash)
-
-    // Top Div first
-
-    h2.innerText = book.title;
-    h3.innerText = book.author;
-
-    topDiv.appendChild(h2);
-    topDiv.appendChild(h3);
-
-    pgCount.setAttribute('class', 'pageCount');
-    pgCountInner.innerText = book.pageCount;
-    pgCount.appendChild(pgCountInner);
-    pgCount.append(" pages");
-
-    topDiv.appendChild(pgCount);
-
-    // Bot Div next
+        const ul = document.querySelector('#bookLibrary');
+        const li = document.createElement('li');
     
-    checkbox.setAttribute('type', 'checkbox');
+        const topDiv = document.createElement('div');
+        const h2 = document.createElement('h2');
+        const h3 = document.createElement('h3');
+        const pgCount = document.createElement('p');
+        const pgCountInner = document.createElement('span');
+    
+        const botDiv = document.createElement('div');
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
+        const removeBtn = document.createElement('button');
 
-    if (book.hasRead) {
-        checkbox.setAttribute('checked', '');
-    }
+        /* 
+         * Match data from book object to
+         * elements, add necessary attributes,
+         * and append them together correctly
+         */
 
-    checkbox.addEventListener('change', function(event){
-        if (this.hasAttribute('checked')) {
-            this.removeAttribute('checked');
+        li.setAttribute('data-library', this.hash)
 
-            //Get the hash of the book
-            const hash = 
-                this
-                .parentElement
-                .parentElement
-                .parentElement
-                .getAttribute('data-library');
+        // Top Div first
 
-            //Extract out the book from
-            //local storage, make change
-            //and push back in
-            const book = JSON.parse(window.localStorage.getItem(hash));
-            book.hasRead = false;
-            pushToLocalStorage(book);
+        h2.innerText = this.title;
+        h3.innerText = this.author;
 
-            //Also Write to the array
-            const bookIndex = getBookIndex(hash);
-            myLibrary[bookIndex].hasRead = false
+        topDiv.appendChild(h2);
+        topDiv.appendChild(h3);
 
-        } else {
-            this.setAttribute('checked', '');
+        pgCount.setAttribute('class', 'pageCount');
+        pgCountInner.innerText = this.pageCount;
+        pgCount.appendChild(pgCountInner);
+        pgCount.append(" pages");
 
-            const hash = 
-                this
-                .parentElement
-                .parentElement
-                .parentElement
-                .getAttribute('data-library');
-            
-            const book = JSON.parse(window.localStorage.getItem(hash));
-            book.hasRead = true;
-            pushToLocalStorage(book);
+        topDiv.appendChild(pgCount);
+
+        // Bot Div next
+        
+        checkbox.setAttribute('type', 'checkbox');
+
+        if (this.hasRead) {
+            checkbox.setAttribute('checked', '');
+        }
+
+        checkbox.addEventListener('change', function(event){
+            if (this.hasAttribute('checked')) {
+                this.removeAttribute('checked');
+
+                //Get the hash of the book
+                const hash = 
+                    this
+                    .parentElement
+                    .parentElement
+                    .parentElement
+                    .getAttribute('data-library');
+
+                //Extract out the book from
+                //local storage, make change
+                //and push back in
+                const book = JSON.parse(window.localStorage.getItem(hash));
+                book.hasRead = false;
+                pushToLocalStorage(book);
+
+                //Also Write to the array
+                const bookIndex = getBookIndex(hash);
+                myLibrary[bookIndex].hasRead = false
+
+            } else {
+                this.setAttribute('checked', '');
+
+                const hash = 
+                    this
+                    .parentElement
+                    .parentElement
+                    .parentElement
+                    .getAttribute('data-library');
+
+                const book = JSON.parse(window.localStorage.getItem(hash));
+                book.hasRead = true;
+                pushToLocalStorage(book);
 
             //Also Write to the array
             const bookIndex = getBookIndex(hash);
             myLibrary[bookIndex].hasRead = true
-        }
-    });
+            }
+        });
 
-    label.appendChild(checkbox);
-    label.append(' Read');
-    botDiv.appendChild(label);
+        label.appendChild(checkbox);
+        label.append(' Read');
+        botDiv.appendChild(label);
 
-    removeBtn.innerText = "Remove";
-    removeBtn.addEventListener('click', 
-        function(event){ 
-            //Remove content from DOM and local storage
-            const rootElement = this.parentElement.parentElement;
-            const hash = rootElement.getAttribute('data-library');
-            const bookIndex = getBookIndex(hash);
+        removeBtn.innerText = "Remove";
+        removeBtn.addEventListener('click', 
+            function(event){ 
+                //Remove content from DOM and local storage
+                const rootElement = this.parentElement.parentElement;
+                const hash = rootElement.getAttribute('data-library');
+                const bookIndex = getBookIndex(hash);
 
-            rootElement.remove();
-            window.localStorage.removeItem(hash);
-            myLibrary.splice(bookIndex, 1);
-        })
-    botDiv.appendChild(removeBtn);
+                rootElement.remove();
+                window.localStorage.removeItem(hash);
+                myLibrary.splice(bookIndex, 1);
+            })
+        botDiv.appendChild(removeBtn);
 
-    //Place into DOM
-    li.appendChild(topDiv);
-    li.appendChild(botDiv);
-    ul.appendChild(li);
+        //Place into DOM
+        li.appendChild(topDiv);
+        li.appendChild(botDiv);
+        ul.appendChild(li);
+    }
 
+    addBookToLibrary() {
+    
+        myLibrary.push(this);
+        this.pushToLocalStorage(this);
+        this.createHTML(this);
+    
+    }
 }
 
-const addBookToLibrary = (title, author, pageCount, hasRead) => {
-
-    /*
-     * Generate a hash of the book, to easily reference
-     * the book across the DOM, array, and localstorage
-     */
-
-    //https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
-
-        const book = new Book(title, author, pageCount, hasRead, hashHex);
-
-    myLibrary.push(book);
-    pushToLocalStorage(book);
-    createHTML(book);
-
-}
-
-/*
 document.querySelector('#hasRead').addEventListener('change', function(event){
     if (this.hasAttribute('checked')) {
         this.removeAttribute('checked');
@@ -220,13 +187,17 @@ document.querySelector('form').addEventListener('submit', (event) => {
     
     readStatus.hasAttribute('checked') 
         ? hasRead = true : hasRead = false;
-
-    addBookToLibrary(
+    
+    const book = new Book(
         document.querySelector('#title').value,
         document.querySelector('#author').value,
         document.querySelector('#pageCount').value,
         hasRead
-    );
+    )
+
+    book.generateHash();
+    book.addBookToLibrary();
+    book.createHTML();
    
     document.querySelector('form').reset();
 
@@ -235,7 +206,6 @@ document.querySelector('form').addEventListener('submit', (event) => {
     }
 
 });
-*/
 
 ( () => {
 
