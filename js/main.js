@@ -28,14 +28,12 @@ class Book {
         this.hash = hash;
     }
 
-    static _checkForHash() {
-        if (this.hash == undefined) {
-            console.log("Cannot continue without a hash. Please generate one first.")
+    generateHash() {
+        if (this.hash !== undefined) {
+            console.log('This book already has a hash');
             return;
         }
-    }
 
-    generateHash() {
         const getHash = (str, seed = 0) => {
             let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
             for (let i = 0, ch; i < str.length; i++) {
