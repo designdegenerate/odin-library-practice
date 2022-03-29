@@ -44,9 +44,9 @@ class Book {
 
     createHTML() {
 
-        const getBookIndex = () => {
-            const rootElement = document.querySelector(`[data-library="${this.hash}"]`);
-            const libIndex = myLibrary.findIndex(book => this.hash == hash);
+        const getBookIndex = hash => {
+            const rootElement = document.querySelector(`[data-library="${hash}"]`);
+            const libIndex = myLibrary.findIndex(book => hash == hash);
             return libIndex;
         }
     
@@ -112,11 +112,11 @@ class Book {
                 //and push back in
                 const book = JSON.parse(window.localStorage.getItem(hash));
                 book.hasRead = false;
-                pushToLocalStorage(book);
+                window.localStorage.setItem(hash, JSON.stringify(book));
 
-                //Also Write to the array
+                //Also write to the array
                 const bookIndex = getBookIndex(hash);
-                myLibrary[bookIndex].hasRead = false
+                myLibrary[bookIndex].hasRead = false;
 
             } else {
                 this.setAttribute('checked', '');
@@ -130,7 +130,7 @@ class Book {
 
                 const book = JSON.parse(window.localStorage.getItem(hash));
                 book.hasRead = true;
-                pushToLocalStorage(book);
+                window.localStorage.setItem(hash, JSON.stringify(book));
 
             //Also Write to the array
             const bookIndex = getBookIndex(hash);
@@ -224,13 +224,14 @@ document.querySelector('form').addEventListener('submit', (event) => {
     let key = localStorage.key(i);
 
     //Convert key string back to JSON
-    const book= JSON.parse(localStorage.getItem(key))
+    const book = JSON.parse(localStorage.getItem(key))
 
     //And then, turn that object back into a class
     const bookClass = new Book(
         book.title,
         book.author,
         book.pageCount,
+        book.hasRead,
         book.hash
     );
 
